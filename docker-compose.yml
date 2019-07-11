@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo
+    volumes: 
+      - ./data:/data/db
+    ports:
+     - "27017:27017"
+    networks:
+      - develop-network
+
+  awesome-api:
+    build:
+      context: ./awesome-api/
+      dockerfile: Dockerfile
+    image: awesome-api
+    container_name: awesome-api
+    restart: unless-stopped
+    environment: 
+      - VIRTUAL_HOST=develop.techbrainlab.com
+    volumes: 
+      - ./awesome-api/:/awesome-api
+    depends_on: 
+      - mongo
+      - nginx-proxy
+    networks:
+      - develop-network
+
+  nginx-proxy:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx-proxy/certs:/etc/nginx/certs
+      - ./nginx-proxy/nginx-conf/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+    restart: unless-stopped
+    networks:
+      - develop-network
+
+networks:
+  develop-network:
+    driver: bridge
