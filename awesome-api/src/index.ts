@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as swaggerUi from 'swagger-ui-express';
 
 import { connectDb } from './db/config';
 import routes from './router';
@@ -16,6 +17,7 @@ class App {
     this.middleware();
     this.setRoutes();
     this.connectToDb();
+    this.startSwaggerDoc();
   }
 
   // Configure Express middleware.
@@ -28,6 +30,7 @@ class App {
   private setRoutes(): void {
     this.express.use(`/api/${process.env.API_VERSION}`, routes.userRouter);
     this.express.use(`/api/${process.env.API_VERSION}`, routes.authRouter);
+    this.express.use(`/api/${process.env.API_VERSION}`, routes.flickrRouter);
   }
 
   /**
@@ -35,6 +38,11 @@ class App {
    */
   private connectToDb(): void {
     connectDb();
+  }
+
+  private startSwaggerDoc(): void {
+    const swaggerDocument = require('../swagger.json');
+    this.express.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 }
 

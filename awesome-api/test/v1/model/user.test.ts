@@ -3,7 +3,7 @@ import 'mocha';
 
 import makeUser from '../../../src/model/user/user';
 
-describe('baseRoute', () => {
+describe('User Model', () => {
     it('should return invalid first name', async () => {
         const nonValidFirstname = { 
             firstName: 'a7med', 

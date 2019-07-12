@@ -19,7 +19,7 @@ const invalidUserEmail = {
   lastName: 'commando'
 };
 
-describe('baseRoute', () => {
+describe('User Route', () => {
   it('should POST new User', async () => {
     const res = await request(App).post(`${apiUrl}/user`).send(validUser);
     expect(res.status).to.equal(200);

@@ -12,14 +12,22 @@ const validUser = {
 };
 
 const invalidUserEmail = {
-  'password': 'passowrd',
+  password: 'passowrd',
   firstName: 'commando',
   lastName: 'commando'
 };
 
-describe('baseRoute', () => {
+describe('Auth Route', () => {
+    it('should LogGETin User', async () => {
+        const res = await request(App).get(`${apiUrl}/login`);
+        expect(res.status).to.equal(200);
+        expect(res.type).to.equal('application/json');
+        expect(res.body).to.contain('token');
+      });
+
   it('should Login User', async () => {
     const res = await request(App).post(`${apiUrl}/login`).send(validUser);
+    console.error(res);
     expect(res.status).to.equal(200);
     expect(res.type).to.equal('application/json');
     expect(res.body).to.contain('token');
