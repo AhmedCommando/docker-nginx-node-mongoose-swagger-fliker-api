@@ -17,7 +17,7 @@ function handleAuthRouters(req: express.Request, res: express.Response): void {
             .send(sendHttpError(HttpStatusCodeEnum.NOT_ALLOWED, `${httpRequest.method} not allowed`));
     }
 
-    const publicUrl = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1';
+    const publicUrl = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1&&safe_search=1';
     request.get(publicUrl, (error: any, response: any, body: any) => {
         if (error) {
             res.status(HttpStatusCodeEnum.BAD_REQUEST).send(error);
