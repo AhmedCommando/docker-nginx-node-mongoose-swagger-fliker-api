@@ -1,12 +1,11 @@
 
-# Rest api built with typescript, express, webpack, pm2, winston logger, tsoa, swagger, docker with nging proxy and mongoDb
+# Rest api built with typescript, express, webpack, pm2, winston logger, flikr, swagger, docker with nging proxy and mongoDb
 
 ## install
 clone the repo and run this commands (feel free to use npm)
 
 ```
 yarn install
-yarn tsoa:gen
 docker-compose up or docker-compose up -d
 ```
 

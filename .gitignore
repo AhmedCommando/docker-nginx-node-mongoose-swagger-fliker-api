@@ -1,4 +1,8 @@
 awesome-api/build
+awesome-api/logs
 awesome-api/node_modules
 data
 nginx-proxy/certs
+.DS_Store
+package-lock.json
+yarn.lock
