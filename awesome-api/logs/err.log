@@ -14,3 +14,5 @@
 2019-07-12T00:53:01: (node:239) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
 2019-07-12T00:54:55: (node:251) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
 2019-07-12T00:54:55: (node:251) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
+2019-07-12T01:00:26: (node:263) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
+2019-07-12T01:00:26: (node:263) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
