@@ -20,3 +20,7 @@ add in the end of file 127.0.0.1 subdomain.yourdomain.com or domain.com like dev
 ```
 create-ssl-certificate --hostname youDomain --domain com
 ```
+
+## Swagger-ui
+To access swagger-ui navigate to /api/docs
+
