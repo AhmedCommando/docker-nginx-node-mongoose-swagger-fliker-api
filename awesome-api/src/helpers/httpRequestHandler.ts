@@ -6,6 +6,7 @@ export interface HttpRequestInterface {
     pathParams: any;
     queryParams: any;
     body: any;
+    headers: any;
 }
 
 /**
@@ -19,6 +20,7 @@ export default function handleHttpRequest(req: express.Request): HttpRequestInte
         method: req.method,
         pathParams: req.params,
         queryParams: req.query,
-        body: req.body 
+        body: req.body,
+        headers: req.headers
     });
 }

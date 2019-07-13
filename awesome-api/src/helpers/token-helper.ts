@@ -33,13 +33,13 @@ export function verifyToken(token: string): any {
         throw new Error('Invalid token');
     }
 
-    const publicKEY = fs.readFileSync('../config/jwt/public.key', 'utf8');
+    const publicKEY = fs.readFileSync(fs.realpathSync('.') + '/src/config/jwt/public.key', 'utf8');
     const {algorithm, ...otherInfo} = signOptions;
 
     try {
         return jwt.verify(token, publicKEY, {...otherInfo, algorithms: ['RS256']});
     } catch (error) {
-        return new Error('User cannot be verified');
+        throw new Error('User cannot be verified');
     }
 }
 

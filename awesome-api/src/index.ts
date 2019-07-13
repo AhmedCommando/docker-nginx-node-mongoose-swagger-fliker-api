@@ -4,6 +4,7 @@ import * as swaggerUi from 'swagger-ui-express';
 
 import { connectDb } from './db/config';
 import routes from './router';
+import { authMiddleware } from './middleware/authMiddleware';
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -35,7 +36,7 @@ class App {
   private setRoutes(): void {
     this.express.use(`/api/${process.env.API_VERSION}/user`, routes.userRouter);
     this.express.use(`/api/${process.env.API_VERSION}/auth`, routes.authRouter);
-    this.express.use(`/api/${process.env.API_VERSION}/flikr`, routes.flickrRouter);
+    this.express.use(`/api/${process.env.API_VERSION}/flickr`, authMiddleware, routes.flickrRouter);
   }
 
   /**
