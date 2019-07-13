@@ -11,7 +11,7 @@
       "name": "MIT"
     }
   },
-  "host": "develop.challenge.com",
+  "host": "develop.techbrainlab.com",
   "basePath": "/api/v1",
 	"consumes": [
 		"application/json"

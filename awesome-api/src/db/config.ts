@@ -6,8 +6,9 @@ export function connectDb(): void {
     global.Promise = require('q').Promise;
     // mongoose.Promise = global.Promise;
     const dbConnection = `mongodb://${process.env.DB_URL}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+    mongoose.set('useCreateIndex', true);
     mongoose.connect(dbConnection,
-      {user: process.env.DB_USER, pass: process.env.DB_PASSWORD}).then(() => {
+      {user: process.env.DB_USER, pass: process.env.DB_PASSWORD, useNewUrlParser: true}).then(() => {
         logger.info('DB connection established! ');
       }, (err) => {
         logger.error('Cant establish connection to the DB! ' + err);

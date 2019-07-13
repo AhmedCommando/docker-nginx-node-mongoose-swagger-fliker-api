@@ -10,7 +10,7 @@ import logger from '../utils/winston-logger';
 
 const router = express.Router();
 
-router.all('/user', handleUserRouters);
+router.all('/', handleUserRouters);
 
 function handleUserRouters(req: express.Request, res: express.Response): void {
     const httpRequest: HttpRequestInterface = handleHttpRequest(req);

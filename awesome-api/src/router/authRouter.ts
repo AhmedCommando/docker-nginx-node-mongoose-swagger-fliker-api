@@ -9,7 +9,7 @@ import authEndpointHandler from '../controller/AuthController';
 
 const router = express.Router();
 
-router.all('/login', handleAuthRouters);
+router.all('/', handleAuthRouters);
 
 // @todo code duplication
 function handleAuthRouters(req: express.Request, res: express.Response): void {

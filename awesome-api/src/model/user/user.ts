@@ -53,7 +53,7 @@ export default function makeUser(user: UserInterface, crypto: any): Readonly<Use
      * @param password 
      */
     function validatePassword(password: string): void {
-        if (isValidPassword(password)) {
+        if (!isValidPassword(password)) {
             throw new Error('Invalid password. should have at least 6 characters');
         }
     }

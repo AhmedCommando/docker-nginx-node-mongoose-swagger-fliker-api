@@ -1,9 +1,8 @@
 import { HttpRequestInterface } from '../helpers/httpRequestHandler';
-import sendHttpError, { HttpStatusCodeEnum, UniqueConstraintError } from '../helpers/httpErrorHandler';
+import sendHttpError, { HttpStatusCodeEnum, handleHttpErrors } from '../helpers/httpErrorHandler';
 import { UserServiceImpl } from '../service/userService';
 import sendHttpResponse, { HttpResponseInterface } from '../helpers/httpResponseHandler';
 import { createToken } from '../helpers/token-helper';
-import logger from '../utils/winston-logger';
 import { isValidPassword, isValidEmail } from '../helpers/validators';
 
 export default function authEndpointHandler(): (httpRequest: HttpRequestInterface) => Promise<HttpResponseInterface> {
@@ -20,23 +19,24 @@ export default function authEndpointHandler(): (httpRequest: HttpRequestInterfac
     async function login(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         try {
             const { email, password } = httpRequest.body;
-            console.error(httpRequest.body);
+
             if (!isValidPassword(password) || !isValidEmail(email)) {
                 throw sendHttpError(HttpStatusCodeEnum.BAD_REQUEST, 'Invalid login form');
-            }
+            } 
+
             const user = await new UserServiceImpl().findByEmail(email);
             if (user) {
-                const token = createToken(user);
                 const response = {
                     user,
-                    token
+                    token: createToken(user)
                 };
                         
-                return sendHttpResponse(HttpStatusCodeEnum.CREATED, response);
+                return sendHttpResponse(HttpStatusCodeEnum.OK, response);
             }
+
+            throw sendHttpError(HttpStatusCodeEnum.NOT_FOUND, 'User not found'); 
         } catch (error) {
-            const statusCode = error instanceof UniqueConstraintError ? HttpStatusCodeEnum.CONFLICT : HttpStatusCodeEnum.BAD_REQUEST;
-            throw sendHttpError(statusCode, error.message);
+            return handleHttpErrors(error);
         }
     }
 }

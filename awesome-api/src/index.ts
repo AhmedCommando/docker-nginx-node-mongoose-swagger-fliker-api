@@ -33,9 +33,9 @@ class App {
   }
 
   private setRoutes(): void {
-    this.express.use(`/api/${process.env.API_VERSION}`, routes.userRouter);
-    this.express.use(`/api/${process.env.API_VERSION}`, routes.authRouter);
-    this.express.use(`/api/${process.env.API_VERSION}`, routes.flickrRouter);
+    this.express.use(`/api/${process.env.API_VERSION}/user`, routes.userRouter);
+    this.express.use(`/api/${process.env.API_VERSION}/auth`, routes.authRouter);
+    this.express.use(`/api/${process.env.API_VERSION}/flikr`, routes.flickrRouter);
   }
 
   /**

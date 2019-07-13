@@ -16,8 +16,12 @@ const signOptions = {
  * @param userId 
  */
 export function createToken(user: UserInterface): string {
-    const privateKEY = fs.readFileSync(fs.realpathSync('.') + '/src/config/jwt/private.key', 'utf8');
-    return jwt.sign({user}, privateKEY, signOptions);
+    try {
+        const privateKEY = fs.readFileSync(fs.realpathSync('.') + '/src/config/jwt/private.key', 'utf8');
+        return jwt.sign({user}, privateKEY, signOptions);
+    } catch (error) {
+        throw error;
+    }
 }
 
 /**

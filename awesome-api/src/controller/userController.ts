@@ -1,12 +1,11 @@
 import * as bcrypt from 'bcryptjs';
 
 import { HttpRequestInterface } from '../helpers/httpRequestHandler';
-import sendHttpError, { HttpStatusCodeEnum, UniqueConstraintError } from '../helpers/httpErrorHandler';
-import makeUser, { UserInterface } from '../model/user/user';
+import sendHttpError, { HttpStatusCodeEnum, handleHttpErrors } from '../helpers/httpErrorHandler';
 import { UserServiceImpl } from '../service/userService';
 import sendHttpResponse, { HttpResponseInterface } from '../helpers/httpResponseHandler';
 import { createToken } from '../helpers/token-helper';
-import logger from '../utils/winston-logger';
+import makeUser from '../model/user/user';
 
 export default function userEndpointHandler(): (httpRequest: HttpRequestInterface) => Promise<HttpResponseInterface> {
     return async function handle(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
@@ -31,11 +30,7 @@ export default function userEndpointHandler(): (httpRequest: HttpRequestInterfac
                     
             return sendHttpResponse(HttpStatusCodeEnum.CREATED, response);
         } catch (error) {
-            if (error.code === 11000) {
-                throw sendHttpError(HttpStatusCodeEnum.BAD_REQUEST, 'User already exist');
-            }
-            const statusCode = error instanceof UniqueConstraintError ? HttpStatusCodeEnum.CONFLICT : HttpStatusCodeEnum.BAD_REQUEST;
-            throw sendHttpError(statusCode, error.message);
+            return handleHttpErrors(error);
         }
     }
 }

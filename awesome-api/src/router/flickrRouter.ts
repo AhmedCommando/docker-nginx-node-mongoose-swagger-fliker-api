@@ -1,5 +1,5 @@
 // export v1 routes
-import request from 'request';
+import * as request from 'request';
 import * as express from 'express';
 
 import sendHttpError, { HttpStatusCodeEnum } from '../helpers/httpErrorHandler';
@@ -7,7 +7,7 @@ import handleHttpRequest, { HttpRequestInterface } from '../helpers/httpRequestH
 
 const router = express.Router();
 
-router.all('/flickr', handleAuthRouters);
+router.all('/', handleAuthRouters);
 
 // @todo code duplication
 function handleAuthRouters(req: express.Request, res: express.Response): void {

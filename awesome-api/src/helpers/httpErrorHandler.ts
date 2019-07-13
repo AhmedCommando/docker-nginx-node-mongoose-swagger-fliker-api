@@ -44,3 +44,17 @@ export class UniqueConstraintError extends Error {
     }
   }
 }
+
+/**
+ * handle all controllers http errors
+ * @param error 
+ */
+export function handleHttpErrors(error: any): HttpResponseInterface {
+  let statusCode = HttpStatusCodeEnum.BAD_REQUEST;
+  let errorsMsg = error.message || error.error;
+  if (error instanceof UniqueConstraintError || error.code === 11000) {
+      errorsMsg = 'User already exist';
+      statusCode = HttpStatusCodeEnum.CONFLICT;
+  } 
+  throw sendHttpError(statusCode, errorsMsg);
+}

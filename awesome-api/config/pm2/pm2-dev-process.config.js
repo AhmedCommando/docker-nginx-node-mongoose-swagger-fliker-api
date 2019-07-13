@@ -8,7 +8,6 @@ module.exports = {
                 "DB_URL": "mongo",
                 "DB_NAME": "awesomeDB",
                 "DB_PORT": 27017,
-                "JWT_KEY": "mySecretKey",
                 "API_VERSION": "v1",
                 "FLICKR_PUBLIC_URL": "https://api.flickr.com/services/feeds/photos_public.gne?format=json"
             }

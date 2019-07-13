@@ -13,6 +13,9 @@ export function hasNumber(text: string): boolean {
  * @param email 
  */
 export function isValidEmail(email: string): boolean {
+    if (!email) {
+        return false;
+    }
     const valid = new RegExp(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
     return valid.test(email);
 }
