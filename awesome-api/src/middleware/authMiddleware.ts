@@ -13,6 +13,7 @@ export const authMiddleware = (req: express.Request, res: express.Response, next
     const httpRequest: HttpRequestInterface = handleHttpRequest(req);
 
     let token = httpRequest.headers['x-access-token'] || httpRequest.headers['authorization'];
+
     if (!token) {
         return errorResponse(res);
     }
@@ -23,7 +24,6 @@ export const authMiddleware = (req: express.Request, res: express.Response, next
     }
 
     try {
-        console.error(verifyToken(token));
         if (verifyToken(token)) {
             next();
         } else {

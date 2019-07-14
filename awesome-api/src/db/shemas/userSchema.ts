@@ -11,6 +11,13 @@ export const UserSchema: Schema = new Schema({
   timestamps: true
 });
 
+// tslint:disable-next-line: typedef
+UserSchema.methods.toJson = function() {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 export interface UserModelInterface extends UserInterface, Document {}
 
 export const userModel: Model<UserModelInterface> = model<UserModelInterface>('User', UserSchema);

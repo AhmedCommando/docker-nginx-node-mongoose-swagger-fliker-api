@@ -21,7 +21,9 @@ export default function userEndpointHandler(): (httpRequest: HttpRequestInterfac
     async function postUser(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         try {
             const user = makeUser(httpRequest.body, bcrypt);
-            const newUser = await new UserServiceImpl().addUser(user);
+            const result = await new UserServiceImpl().addUser(user);
+            const newUser = result.toObject();
+            delete newUser.password;
             const token = createToken(newUser);
             const response = {
                 user: newUser,

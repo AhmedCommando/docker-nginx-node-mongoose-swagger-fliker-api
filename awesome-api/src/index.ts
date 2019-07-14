@@ -26,9 +26,15 @@ class App {
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
     this.express.disable('x-powered-by');
-    this.express.use(function (req, res, next) {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    
+    this.express.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-type,Accept,Origin,X-Requested-With,x-access-token');
+      res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+
+      if (req.method === 'OPTIONS') {
+          return res.status(200).end();
+      }
       next();
     });
   }

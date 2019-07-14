@@ -6,10 +6,12 @@ import * as express from 'express';
 import handleHttpRequest, { HttpRequestInterface } from '../helpers/httpRequestHandler';
 import { HttpResponseInterface } from '../helpers/httpResponseHandler';
 import authEndpointHandler from '../controller/AuthController';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
 router.all('/', handleAuthRouters);
+router.get('/me', handleAuthRouters);
 
 // @todo code duplication
 function handleAuthRouters(req: express.Request, res: express.Response): void {

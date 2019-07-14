@@ -35,8 +35,7 @@ export function verifyToken(token: string): any {
 
     const publicKEY = fs.readFileSync(fs.realpathSync('.') + '/src/config/jwt/public.key', 'utf8');
     const {algorithm, ...otherInfo} = signOptions;
-
-    try {
+    try { 
         return jwt.verify(token, publicKEY, {...otherInfo, algorithms: ['RS256']});
     } catch (error) {
         throw new Error('User cannot be verified');

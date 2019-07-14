@@ -9,7 +9,7 @@ export interface UserInterface {
     lastName: string;
     email: string;
     userName: string;
-    password: string;
+    password?: string;
 }
 
 export default function makeUser(user: UserInterface, crypto: any): Readonly<UserInterface> {
