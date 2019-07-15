@@ -1,10 +1,15 @@
-import { HttpRequestInterface } from '../helpers/httpRequestHandler';
-import sendHttpError, { HttpStatusCodeEnum, handleHttpErrors } from '../helpers/httpErrorHandler';
-import { UserServiceImpl } from '../service/userService';
-import sendHttpResponse, { HttpResponseInterface } from '../helpers/httpResponseHandler';
-import { createToken, verifyToken } from '../helpers/token-helper';
-import { isValidPassword, isValidEmail } from '../helpers/validators';
+import * as bcrypt from 'bcryptjs';
 
+import { createToken, verifyToken } from '../helpers/token-helper';
+import { HttpRequestInterface } from '../helpers/httpRequestHandler';
+import { isValidPassword, isValidEmail } from '../helpers/validators';
+import { UserServiceImpl } from '../service/userService';
+import sendHttpError, { HttpStatusCodeEnum, handleHttpErrors } from '../helpers/httpErrorHandler';
+import sendHttpResponse, { HttpResponseInterface } from '../helpers/httpResponseHandler';
+
+/**
+ * factory function handle all allowed http requests to auth endpoint
+ */
 export default function authEndpointHandler(): (httpRequest: HttpRequestInterface) => Promise<HttpResponseInterface> {
     return async function handle(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         switch (httpRequest.method) {
@@ -18,6 +23,10 @@ export default function authEndpointHandler(): (httpRequest: HttpRequestInterfac
         }
     };
 
+    /**
+     * Handle login
+     * @param httpRequest 
+     */
     async function login(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         try {
             const { email, password } = httpRequest.body;
@@ -25,17 +34,21 @@ export default function authEndpointHandler(): (httpRequest: HttpRequestInterfac
                 throw sendHttpError(HttpStatusCodeEnum.BAD_REQUEST, 'Invalid login form');
             } 
 
-            const user = await new UserServiceImpl().findByEmail(email);
-            if (user) {
+             const user = await new UserServiceImpl().findByEmail(email);
+            if (user && bcrypt.compareSync(password, user.password)) {
                 const response = {
                     user,
                     token: createToken(user)
                 };
-                        
+                            
                 return sendHttpResponse(HttpStatusCodeEnum.OK, response);
             }
 
-            throw sendHttpError(HttpStatusCodeEnum.NOT_FOUND, 'User not found'); 
+            if (!user) {
+                throw sendHttpError(HttpStatusCodeEnum.NOT_FOUND, 'User not found'); 
+            }
+
+            throw sendHttpError(HttpStatusCodeEnum.BAD_REQUEST, 'Invalid user email or password');
         } catch (error) {
             return handleHttpErrors(error);
         }

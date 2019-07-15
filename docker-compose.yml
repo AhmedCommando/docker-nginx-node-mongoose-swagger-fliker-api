@@ -18,7 +18,7 @@ services:
     container_name: awesome-api
     restart: unless-stopped
     environment: 
-      - VIRTUAL_HOST=develop.techbrainlab.com
+      - VIRTUAL_HOST=develop.domain.com
     volumes: 
       - ./awesome-api/:/awesome-api
     depends_on: 

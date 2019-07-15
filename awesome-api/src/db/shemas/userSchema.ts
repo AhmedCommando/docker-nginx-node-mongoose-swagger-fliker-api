@@ -14,7 +14,6 @@ export const UserSchema: Schema = new Schema({
 // tslint:disable-next-line: typedef
 UserSchema.methods.toJson = function() {
   const obj = this.toObject();
-  delete obj.password;
   return obj;
 };
 

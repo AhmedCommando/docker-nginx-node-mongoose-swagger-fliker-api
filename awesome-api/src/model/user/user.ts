@@ -12,6 +12,13 @@ export interface UserInterface {
     password?: string;
 }
 
+/**
+ * facory function to create and validate a user
+ * crypto have type any because we can be flexible by changing or using
+ * different crypto lib
+ * @param user 
+ * @param crypto 
+ */
 export default function makeUser(user: UserInterface, crypto: any): Readonly<UserInterface> {
     const validUser: UserInterface = validate(user);
     return Object.freeze(normalize(validUser));
@@ -62,7 +69,7 @@ export default function makeUser(user: UserInterface, crypto: any): Readonly<Use
      * normalize user
      * @param user 
      */
-    function normalize (user: UserInterface): UserInterface {
+    function normalize(user: UserInterface): UserInterface {
         return {
             firstName: upperFirst(user.firstName),
             lastName: upperFirst(user.lastName),
@@ -73,12 +80,12 @@ export default function makeUser(user: UserInterface, crypto: any): Readonly<Use
     }
 
     /**
-     * crypt password with nodejs crypto library
-     * @todo change this and move it from here, maybe use bcrypt
+     * crypt password with nodejs bcrypt library
+     * @todo change this maybe mongoose method
      * @param password 
      */
     function cryptPassword(password: string): string {
-        const salt = crypto.genSaltSync(10);
+        const salt = crypto.genSaltSync(8);
         return crypto.hashSync(password, salt);
     }
 }

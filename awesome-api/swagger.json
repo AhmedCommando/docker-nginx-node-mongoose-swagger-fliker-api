@@ -1,161 +1,336 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "This is the documentation for our simple awesom rest api built with node js, typescript, docker, mongoose, pm2 and webpack. Also with fetch flickr public api",
-    "version": "1.0.0",
-    "title": "Awesome API",
-    "contact": {
-      "email": "ahmedkhalilbejaoui@gmail.com"
-    },
-    "license": {
-      "name": "MIT"
-    }
-  },
-  "host": "develop.techbrainlab.com",
-  "basePath": "/api/v1",
+	"swagger": "2.0",
+	"info": {
+	  "description": "This is the documentation for our simple awesom rest api built with node js, typescript, docker, mongoose, pm2 and webpack. Also with fetch flickr public api",
+	  "version": "1.0.0",
+	  "title": "Awesome API",
+	  "contact": {
+		"email": "ahmedkhalilbejaoui@gmail.com"
+	  },
+	  "license": {
+		"name": "MIT"
+	  }
+	},
+	"host": "develop.domain.com",
+	"basePath": "/api/v1",
 	"consumes": [
-		"application/json"
+	  "application/json"
 	],
-
 	"paths": {
-		"/user": {
-			"post": {
-				"operationId": "RegisterUser",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"schema": {
-							"type": "object"
-						}
-					},
-					"Unexpected error": {
-						"description": "",
-						"schema": {
-							"$ref": "#/definitions/HttpResponseInterface"
-						}
-					}
-				},
-				"tags": [
-					"UserController"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "user",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/UserInterface"
-						}
-					}
-				]
+	  "/user": {
+		"post": {
+		  "operationId": "Register User",
+		  "produces": [
+			"application/json"
+		  ],
+		  "responses": {
+			"201": {
+			  "description": "Register new user",
+			  "schema": {
+				"$ref": "#/definitions/HttpResponseInterface"
+			  }
+			},
+			"400": {
+			  "description": "Bad request or type error",
+			  "schema": {
+				"$ref": "#/definitions/HttpErrorResponseInterface"
+			  }
+			},
+			"409": {
+			  "description": "User already exists"
 			}
+		  },
+		  "tags": [
+			"Users"
+		  ],
+		  "security": [],
+		  "parameters": [
+			{
+			  "in": "body",
+			  "name": "user",
+			  "required": true,
+			  "schema": {
+				"$ref": "#/definitions/UserInterface"
+			  }
+			}
+		  ]
 		}
+	  },
+	  "/auth": {
+		"post": {
+		  "operationId": "Login User",
+		  "produces": [
+			"application/json"
+		  ],
+		  "tags": [
+			"Authentication"
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Authenticate a registered user",
+			  "schema": {
+				"$ref": "#/definitions/HttpRegisteredUserInterface"
+			  }
+			},
+			"400": {
+			  "description": "Invalid user email or password",
+			  "schema": {
+				"$ref": "#/definitions/HttpErrorResponseInterface"
+			  }
+			},
+			"404": {
+			  "description": "User Not found",
+			  "schema": {
+				"$ref": "#/definitions/HttpErrorResponseInterface"
+			  }
+			}
+		  }
+		}
+	  },
+	  "/auth/me": {
+		"get": {
+		  "operationId": "Get logged in user",
+		  "produces": [
+			"application/json"
+		  ],
+		  "tags": [
+			"Authentication"
+		  ],
+		  "security": [
+			{
+			  "TokenKeyAuth": []
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Get logged in user",
+			  "schema": {
+				"$ref": "#/definitions/RegisteredUserInterface"
+			  }
+			},
+			"401": {
+			  "description": "Unauthorized to access data",
+			  "schema": {
+				"$ref": "#/definitions/HttpErrorResponseInterface"
+			  }
+			}
+		  }
+		}
+	  },
+	  "/flickr": {
+		"get": {
+		  "operationId": "Get flickr images",
+		  "security": [
+			{
+			  "TokenKeyAuth": []
+			}
+		  ],
+		  "produces": [
+			"application/json"
+		  ],
+		  "tags": [
+			"flickr"
+		  ],
+		  "parameters": [
+			{
+			  "in": "query",
+			  "name": "page",
+			  "description": "Page number",
+			  "type": "integer"
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Get 20 flickr images",
+			  "schema": {
+				"$ref": "#/definitions/HttpResponseInterface"
+			  }
+			},
+			"400": {
+			  "description": "Bad request",
+			  "schema": {
+				"$ref": "#/definitions/HttpErrorResponseInterface"
+			  }
+			},
+			"401": {
+				"description": "Unauthorized to access data",
+				"schema": {
+				  "$ref": "#/definitions/HttpErrorResponseInterface"
+				}
+			}
+		  }
+		}
+	  }
 	},
 	"produces": [
-		"application/json"
+	  "application/json"
 	],
-  "securityDefinitions": {
-    "awesomeapi_auth": {
-      "type": "apiKey",
-      "name": "token",
-      "in": "header"
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    }
-  },
-  "definitions": {
-    "HttpResponseInterface": {
+	"securityDefinitions": {
+	  "TokenKeyAuth": {
+		"type": "apiKey",
+		"in": "header",
+		"name": "X-access-token"
+	  }
+	},
+	"security": [
+	  {
+		"TokenKeyAuth": []
+	  }
+	],
+	"definitions": {
+	  "HttpResponseInterface": {
+		"properties": {
+		  "headers": {
+			"type": "object",
 			"properties": {
-				"headers": {
-					"type": "object"
-				},
-				"statusCode": {
-					"type": "number",
-					"format": "double"
-				},
-				"data": {
-					"type": "object"
-				},
-				"error": {
-					"type": "string",
-					"x-nullable": true
-				}
-			},
-			"required": [
-				"headers",
-				"statusCode",
-				"data"
-			],
-			"type": "object"
+			  "content-type": {
+				"type": "string"
+			  }
+			}
+		  },
+		  "statusCode": {
+			"type": "number"
+		  },
+		  "data": {
+			"type": "array",
+			"items": {
+			  "type": "object"
+			}
+		  }
 		},
-    "UserInterface": {
+		"required": [
+		  "headers",
+		  "statusCode",
+		  "data"
+		],
+		"type": "object"
+	  },
+	  "HttpErrorResponseInterface": {
+		"properties": {
+		  "headers": {
+			"type": "object",
 			"properties": {
-				"firstName": {
-					"type": "string"
-				},
-				"lastName": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				},
-				"userName": {
-					"type": "string"
-				},
-				"password": {
-					"type": "string"
-				}
-			},
-			"required": [
-				"firstName",
-				"lastName",
-				"email",
-				"userName",
-				"password"
-			],
-			"type": "object"
+			  "content-type": {
+				"type": "string"
+			  }
+			}
+		  },
+		  "statusCode": {
+			"type": "number"
+		  },
+		  "data": {
+			"type": "array",
+			"items": {
+			  "type": "object"
+			}
+		  },
+		  "error": {
+			"type": "string"
+		  }
 		},
-    "flickr": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "modified": {
-          "type": "string"
-        },
-        "items": {
-          "type": "object"
-        }
-      }
-    },
-    "ApiResponse": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "errors": {
-          "type": "object"
-        },
-        "data": {
-          "type": "object"
-        }
-      }
-    }
+		"required": [
+		  "headers",
+		  "statusCode",
+		  "error"
+		],
+		"type": "object"
+	  },
+	  "RegisteredUserInterface": {
+		"properties": {
+		  "_id": {
+			"type": "string"
+		  },
+		  "firstName": {
+			"type": "string"
+		  },
+		  "lastName": {
+			"type": "string"
+		  },
+		  "email": {
+			"type": "string"
+		  },
+		  "createdAt": {
+			"type": "string"
+		  },
+		  "updatedAt": {
+			"type": "string"
+		  }
+		},
+		"required": [
+		  "_id",
+		  "firstName",
+		  "lastName",
+		  "email",
+		  "createdAt",
+		  "updatedAt"
+		]
+	  },
+	  "HttpRegisteredUserInterface": {
+		"properties": {
+		  "token": {
+			"type": "string"
+		  },
+		  "user": {
+			"$ref": "#/definitions/RegisteredUserInterface"
+		  }
+		},
+		"required": [
+		  "token",
+		  "user"
+		]
+	  },
+	  "UserInterface": {
+		"properties": {
+		  "firstName": {
+			"type": "string"
+		  },
+		  "lastName": {
+			"type": "string"
+		  },
+		  "email": {
+			"type": "string"
+		  },
+		  "userName": {
+			"type": "string"
+		  },
+		  "password": {
+			"type": "string"
+		  }
+		},
+		"required": [
+		  "firstName",
+		  "lastName",
+		  "email",
+		  "userName",
+		  "password"
+		],
+		"type": "object"
+	  },
+	  "flickr": {
+		"type": "object",
+		"properties": {
+		  "title": {
+			"type": "string"
+		  },
+		  "link": {
+			"type": "string"
+		  },
+		  "description": {
+			"type": "string"
+		  },
+		  "authorName": {
+			"type": "string"
+		  },
+		  "authorLink": {
+			"type": "string"
+		  },
+		  "image": {
+			"type": "string"
+		  },
+		  "tags": {
+			"type": "string"
+		  }
+		}
+	  }
+	}
   }
-}

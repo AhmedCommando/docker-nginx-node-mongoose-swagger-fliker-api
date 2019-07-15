@@ -9,6 +9,12 @@ const errorResponse = (res: express.Response) =>
     res.status(HttpStatusCodeEnum.UNAUTHORIZED)
         .json(sendHttpError(HttpStatusCodeEnum.UNAUTHORIZED, 'Unauthorized to access data')).end(); 
 
+/**
+ * Middleware used to check if current user is connected
+ * @param req 
+ * @param res 
+ * @param next 
+ */
 export const authMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const httpRequest: HttpRequestInterface = handleHttpRequest(req);
 

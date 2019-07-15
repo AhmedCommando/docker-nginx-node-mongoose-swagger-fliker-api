@@ -4,7 +4,7 @@
   "description": "a boilerplate using node with typescript and webpack",
   "main": "./src/bin/www.ts",
   "scripts": {
-    "test:dev:v1": "TS_NODE_PROJECT=config/test/tsconfig.test.json env DB_URL='develop.techbrainlab.com' DB_NAME='awesomeDB' DB_PORT=27017 API_VERSION='v1' mocha -r ts-node/register test/**/*.test.ts --timeout 10000",
+    "test:dev:v1": "TS_NODE_PROJECT=config/test/tsconfig.test.json env DB_URL='develop.domain.com' DB_NAME='awesomeDB' DB_PORT=27017 API_VERSION='v1' mocha -r ts-node/register test/**/*.test.ts --timeout 10000",
     "test:v1": "TS_NODE_PROJECT=config/test/tsconfig.test.json env DB_URL='mongo' DB_NAME='awesomeDB' DB_PORT=27017 API_VERSION='v1' mocha -r ts-node/register test/**/*.test.ts --timeout 10000",
     "clean": "rimraf ./build/* && rimraf ./logs/*",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",

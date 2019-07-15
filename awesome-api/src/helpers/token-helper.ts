@@ -3,6 +3,16 @@ import * as fs from 'fs';
 
 import { UserInterface } from './../model/user/user';
 
+/**
+ * Cryptography
+ * asymmetric algorithms that convert messages into an unreadable format.
+ * A person who has a public key can encrypt the message intended for a specific receiver.
+ * For better security we are using private and public key to create and hash our token
+ */
+
+ /**
+  * JWT sign option
+  */
 const signOptions = {
     issuer: 'homeDev',
     subject: 'authUser',
@@ -12,7 +22,7 @@ const signOptions = {
 };
 
 /**
- * create authentication token iwth jwt
+ * create authentication token with jwt
  * @param userId 
  */
 export function createToken(user: UserInterface): string {

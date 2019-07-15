@@ -16,8 +16,6 @@ export const invalidUserEmail = {
 };
 
 export const registeredUser = {
-    password: 'passowrd',
-    email: 'passowrd@pp.com',
-    firstName: 'ahmed',
-    lastName: 'bejaoui'
+    'password': 'password',
+    'email': 'ahmed@develop.com'
 };
