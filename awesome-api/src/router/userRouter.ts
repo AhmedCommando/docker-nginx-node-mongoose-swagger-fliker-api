@@ -11,6 +11,7 @@ import logger from '../utils/winston-logger';
 const router = express.Router();
 
 router.all('/', handleUserRouters);
+// router.get('/:userId', handleUserRouters);
 
 function handleUserRouters(req: express.Request, res: express.Response): void {
     const httpRequest: HttpRequestInterface = handleHttpRequest(req);

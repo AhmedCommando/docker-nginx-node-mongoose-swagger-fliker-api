@@ -20,4 +20,8 @@ export class UserServiceImpl implements UserServiceInterface {
     async findByEmail(email: string): Promise<UserInterface> {
         return await userModel.findOne({email});
     }
+
+    async deleteById(id: string): Promise<any> {
+        return await userModel.deleteOne({_id: id});
+    }
 }

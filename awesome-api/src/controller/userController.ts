@@ -15,6 +15,10 @@ export default function userEndpointHandler(): (httpRequest: HttpRequestInterfac
         switch (httpRequest.method) {
             case 'POST':
                 return postUser(httpRequest);
+            case 'DELETE':
+                return deleteUser(httpRequest);
+            case 'PUT':
+                return updateUser(httpRequest);
 
             default:
                 throw sendHttpError(HttpStatusCodeEnum.NOT_ALLOWED, `${httpRequest.method} not allowed`);
@@ -41,5 +45,28 @@ export default function userEndpointHandler(): (httpRequest: HttpRequestInterfac
         } catch (error) {
             return handleHttpErrors(error);
         }
+    }
+
+    async function deleteUser(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
+        try {
+            const userId = httpRequest.pathParams.userId;
+            new UserServiceImpl().deleteById(userId).then((err) => {
+                if (err) {
+                    return handleHttpErrors(err);
+                }
+                return sendHttpResponse(HttpStatusCodeEnum.OK, `User with the id ${userId} has been deleted`);
+            });
+        } catch (error) {
+            return handleHttpErrors(error);
+        }
+    }
+
+    /**
+     * @todo finish implementing update user
+     * @param httpRequest 
+     */
+    async function updateUser(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
+        const userId = httpRequest.pathParams.userId;
+        return sendHttpResponse(HttpStatusCodeEnum.OK, `User with the id ${userId} has been updated`);
     }
 }
