@@ -11,7 +11,7 @@
 		"name": "MIT"
 	  }
 	},
-	"host": "develop.techbrainlab.com",
+	"host": "develop.domain.com",
 	"basePath": "/api/v1",
 	"consumes": [
 	  "application/json"
