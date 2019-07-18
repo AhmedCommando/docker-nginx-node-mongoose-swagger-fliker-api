@@ -19,3 +19,10 @@ export const registeredUser = {
     'password': 'password',
     'email': 'ahmed@develop.com'
 };
+
+export const userToUpdate = (userId) => {
+    return {
+        userId,
+        firstName: 'ahmed'
+    };
+};
