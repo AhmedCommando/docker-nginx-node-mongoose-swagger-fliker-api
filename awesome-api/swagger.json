@@ -11,7 +11,7 @@
 		"name": "MIT"
 	  }
 	},
-	"host": "develop.domain.com",
+	"host": "develop.techbrainlab.com",
 	"basePath": "/api/v1",
 	"consumes": [
 	  "application/json"
@@ -54,6 +54,90 @@
 			  }
 			}
 		  ]
+		},
+		"put": {
+			"operationId": "Update User",
+			"produces": [
+			  "application/json"
+			],
+			"responses": {
+			  "200": {
+				"description": "Update user",
+				"schema": {
+				  "$ref": "#/definitions/HttpResponseInterface"
+				}
+			  },
+			  "400": {
+				"description": "Bad request or type error",
+				"schema": {
+				  "$ref": "#/definitions/HttpErrorResponseInterface"
+				}
+			  },
+			  "404": {
+				"description": "User not found"
+			  }
+			},
+			"tags": [
+			  "Users"
+			],
+			"security": [
+				{
+			 		"TokenKeyAuth": []
+				}
+			],
+			"parameters": [
+			  {
+				"in": "body",
+				"name": "user",
+				"required": true,
+				"schema": {
+				  "$ref": "#/definitions/UpdateAndDeleteUserRequestInterface"
+				}
+			  }
+			]
+		},
+		"delete": {
+		"operationId": "Delete User",
+		"produces": [
+			"application/json"
+		],
+		"responses": {
+			"200": {
+			"description": "Delete user",
+			"schema": {
+				"$ref": "#/definitions/HttpResponseInterface"
+			}
+			},
+			"400": {
+			"description": "Bad request or type error",
+			"schema": {
+				"$ref": "#/definitions/HttpErrorResponseInterface"
+			}
+			},
+			"404": {
+			"description": "User not found"
+			}
+		},
+		"tags": [
+			"Users"
+		],
+		"security": [
+			{
+			"TokenKeyAuth": []
+			}
+		],
+		"parameters": [
+			{
+				"in": "body",
+				"name": "user",
+				"required": true,
+				"properties": {
+					"userId": {
+						"type": "string"
+					}
+				}
+			}
+		]
 		}
 	  },
 	  "/auth": {
@@ -278,6 +362,32 @@
 		  "token",
 		  "user"
 		]
+	  },
+	  "UpdateAndDeleteUserRequestInterface": {
+		"properties": {
+			"userId": {
+			  "type": "string"
+			},
+			"firstName": {
+				"type": "string"
+			},
+			"lastName": {
+			  "type": "string"
+			},
+			"email": {
+			  "type": "string"
+			},
+			"userName": {
+			  "type": "string"
+			},
+			"password": {
+			  "type": "string"
+			}
+		  },
+		  "required": [
+			"userId"
+		  ],
+		  "type": "object"
 	  },
 	  "UserInterface": {
 		"properties": {
