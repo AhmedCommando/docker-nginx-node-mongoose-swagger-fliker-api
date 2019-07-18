@@ -2,15 +2,17 @@ import * as bcrypt from 'bcryptjs';
 
 import { createToken } from '../helpers/token-helper';
 import { HttpRequestInterface } from '../helpers/httpRequestHandler';
-import { UserServiceImpl } from '../service/userService';
 import makeUser from '../model/user/user';
 import sendHttpError, { HttpStatusCodeEnum, handleHttpErrors } from '../helpers/httpErrorHandler';
 import sendHttpResponse, { HttpResponseInterface } from '../helpers/httpResponseHandler';
+import { UserServiceImpl } from '../service/userService';
+import { encryptPassword } from '../helpers/crypto';
 
 /**
  * factory function handles all allowed methods to user endpoint
  */
-export default function userEndpointHandler(): (httpRequest: HttpRequestInterface) => Promise<HttpResponseInterface> {
+// tslint:disable-next-line: max-line-length
+export default function userEndpointHandler(userServiceImpl: UserServiceImpl): (httpRequest: HttpRequestInterface) => Promise<HttpResponseInterface> {
     return async function handle(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         switch (httpRequest.method) {
             case 'POST':
@@ -32,7 +34,7 @@ export default function userEndpointHandler(): (httpRequest: HttpRequestInterfac
     async function postUser(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         try {
             const user = makeUser(httpRequest.body, bcrypt);
-            const result = await new UserServiceImpl().addUser(user);
+            const result = await userServiceImpl.addUser(user);
             const newUser = result.toObject();
             delete newUser.password;
             const token = createToken(newUser);
@@ -49,24 +51,35 @@ export default function userEndpointHandler(): (httpRequest: HttpRequestInterfac
 
     async function deleteUser(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
         try {
-            const userId = httpRequest.pathParams.userId;
-            new UserServiceImpl().deleteById(userId).then((err) => {
-                if (err) {
-                    return handleHttpErrors(err);
-                }
-                return sendHttpResponse(HttpStatusCodeEnum.OK, `User with the id ${userId} has been deleted`);
-            });
+            if (await userServiceImpl.deleteById(httpRequest.body.userId)) {
+                return sendHttpResponse(HttpStatusCodeEnum.OK, `User with the id ${httpRequest.body.userId} has been deleted`);
+            }
+            
+            throw sendHttpError(HttpStatusCodeEnum.NOT_FOUND, `User with the id ${httpRequest.body.userId} not found`);
         } catch (error) {
             return handleHttpErrors(error);
         }
     }
 
     /**
-     * @todo finish implementing update user
+     * @todo implement joi as a better solution for request data validation
      * @param httpRequest 
      */
     async function updateUser(httpRequest: HttpRequestInterface): Promise<HttpResponseInterface> {
-        const userId = httpRequest.pathParams.userId;
-        return sendHttpResponse(HttpStatusCodeEnum.OK, `User with the id ${userId} has been updated`);
+        try {
+            const {userId, ...user} = httpRequest.body;
+            if ('password' in user) {
+                user.password = encryptPassword(bcrypt, user.password);
+            }
+
+            const newUser = await userServiceImpl.updateUser(userId, user);
+            if (newUser) {
+                return sendHttpResponse(HttpStatusCodeEnum.OK, newUser);
+            }
+
+            throw sendHttpError(HttpStatusCodeEnum.NOT_FOUND, `User with the id ${userId} not found`);
+        } catch (error) {
+            return handleHttpErrors(error);
+        }
     }
 }

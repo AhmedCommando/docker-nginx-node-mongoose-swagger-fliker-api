@@ -53,7 +53,7 @@ export function handleHttpErrors(error: any): HttpResponseInterface {
   let statusCode = error.statusCode || HttpStatusCodeEnum.BAD_REQUEST;
   let errorsMsg = error.message || error.error;
   if (error instanceof UniqueConstraintError || error.code === 11000) {
-      errorsMsg = 'User already exist';
+      errorsMsg = 'Data already exist';
       statusCode = HttpStatusCodeEnum.CONFLICT;
   } 
   throw sendHttpError(statusCode, errorsMsg);

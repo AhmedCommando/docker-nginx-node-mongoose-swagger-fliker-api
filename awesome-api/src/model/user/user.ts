@@ -1,5 +1,6 @@
 import { hasNumber, isValidEmail, isValidPassword } from '../../helpers/validators';
 import upperFirst from '../../helpers/upperFirst';
+import { encryptPassword } from '../../helpers/crypto';
 
 /**
  * user interface
@@ -85,7 +86,6 @@ export default function makeUser(user: UserInterface, crypto: any): Readonly<Use
      * @param password 
      */
     function cryptPassword(password: string): string {
-        const salt = crypto.genSaltSync(8);
-        return crypto.hashSync(password, salt);
+        return encryptPassword(crypto, password);
     }
 }
