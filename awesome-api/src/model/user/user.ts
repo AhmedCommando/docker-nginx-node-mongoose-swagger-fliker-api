@@ -70,13 +70,13 @@ export default function makeUser(user: UserInterface, crypto: any): Readonly<Use
      * normalize user
      * @param user 
      */
-    function normalize(user: UserInterface): UserInterface {
+    function normalize({firstName, lastName, email, userName, password}: UserInterface): UserInterface {
         return {
-            firstName: upperFirst(user.firstName),
-            lastName: upperFirst(user.lastName),
-            email: user.email.toLowerCase(),
-            userName: user.userName,
-            password: cryptPassword(user.password)
+            firstName: upperFirst(firstName),
+            lastName: upperFirst(lastName),
+            email: email.toLowerCase(),
+            userName: userName,
+            password: cryptPassword(password)
         };
     }
 

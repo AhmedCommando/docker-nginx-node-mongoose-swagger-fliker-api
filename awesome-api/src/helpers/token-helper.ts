@@ -13,12 +13,15 @@ import { UserInterface } from './../model/user/user';
  /**
   * JWT sign option
   */
+
+const algorithm: jwt.Algorithm = 'RS256';
+
 const signOptions = {
     issuer: 'homeDev',
     subject: 'authUser',
     audience: 'dev',
     expiresIn: '12H',
-    algorithm: 'RS256'
+    algorithm
 };
 
 /**
@@ -44,9 +47,10 @@ export function verifyToken(token: string): any {
     }
 
     const publicKEY = fs.readFileSync(fs.realpathSync('.') + '/src/config/jwt/public.key', 'utf8');
+    // tslint:disable-next-line: no-shadowed-variable
     const {algorithm, ...otherInfo} = signOptions;
     try { 
-        return jwt.verify(token, publicKEY, {...otherInfo, algorithms: ['RS256']});
+        return jwt.verify(token, publicKEY, {...otherInfo, algorithms: [algorithm]});
     } catch (error) {
         throw new Error('User cannot be verified');
     }

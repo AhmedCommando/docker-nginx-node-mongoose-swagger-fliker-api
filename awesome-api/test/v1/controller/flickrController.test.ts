@@ -3,10 +3,7 @@ import { agent as request } from 'supertest';
 import 'mocha';
 
 import App from '../../../src/index';
-import { apiUrl } from '../../helper/fixtures';
-
-// tslint:disable-next-line: max-line-length
-const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjVkMzBlNmE1OGVkMTIyMDdiODdmZmU1YyIsImZpcnN0TmFtZSI6IkFobWVkIiwibGFzdE5hbWUiOiJCZWphb3VpIiwiZW1haWwiOiJhaG1lZEBkZXZlbG9wLmNvbSIsImNyZWF0ZWRBdCI6IjIwMTktMDctMThUMjE6Mzc6NDEuMzkwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDctMThUMjE6Mzc6NDEuMzkwWiIsIl9fdiI6MH0sImlhdCI6MTU2MzQ4NTg2MSwiZXhwIjoxNTYzNTI5MDYxLCJhdWQiOiJkZXYiLCJpc3MiOiJob21lRGV2Iiwic3ViIjoiYXV0aFVzZXIifQ.2ImbB4F8tMBifjS_snIXEomuVj4bODx2CJ5PXf_IS5c-o7u8_psOltFIZhi99wbvx0CYGfpEHBwadIUC4X7d3Q';
+import { apiUrl, token } from '../../helper/fixtures';
 
 describe('Flickr Route', () => {
   it('should GET data', async () => {
